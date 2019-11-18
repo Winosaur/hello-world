@@ -1,0 +1,72 @@
+greetingMessage = '''Аве, Цезарь!
+Для того, чтобы зашифровать сообщение, введите CRYPT, далее через пробел целое число для определения смещения и через пробел текст на латинице, который необходимо зашифровать.
+Для того, чтобы расшифровать сообщение, введите DECRYPT, далее через пробел целое число для определения смещения и через пробел текст на латинице, который необходимо расшифровать.
+Например, CRYPT 4 HELLO PONY
+'''
+def main():
+  print(greetingMessage)
+  userText = list(map(str, input().split()))
+  mode = userText[0]
+  shift = userText[1]
+  text = ' '.join(userText[2:])
+  
+  if mode != 'CRYPT' and mode != 'DECRYPT':
+     print('Введена некорректная команда. Для шифрования введите CRYPT, для расшифровки - DECRYPT.')
+     
+
+  def crypt(shift, text): # шифровка
+    cryptedText = ''
+    for char in text:
+      if ord(char) == 32: #обработка пробела
+        cryptedText += char
+      elif ord(char) >= 65 and ord(char) <= 90:  #диапазон букв A - Z
+        char = chr(ord(char) + int(shift))
+        if ord(char) <= 90:    
+          cryptedText += char
+        else:  #если результат сдвига выходит за пределы диапазона
+          char = chr(ord(char) - 26)
+          cryptedText += char
+      elif ord(char) >= 97 and ord(char) <= 122:   #диапазон букв a - z
+        char = chr(ord(char) + int(shift))
+        cryptedText += char
+      else:   #обработка осталных символов
+        cryptedText += char
+
+    return cryptedText
+
+  def decrypt(shift, text): # расшифровка
+    decryptedText = ''
+    for char in text:
+      if ord(char) == 32:   #обработка пробела
+        decryptedText += char
+      elif ord(char) >= 65 and ord(char) <= 90:   #диапазон букв A - Z
+        char = chr(ord(char) - int(shift))
+        if ord(char) >= 65:
+          decryptedText += char
+        else:   #если результат сдвига выходит за пределы диапазона
+          char = chr(ord(char) + 26)
+          decryptedText += char
+      elif ord(char) >= 97 and ord(char) <= 122:   #диапазон букв a - z
+        char = chr(ord(char) - int(shift))
+        decryptedText += char
+      else:   #обработка осталных символов
+        decryptedText += char
+      
+    return decryptedText
+
+  def processString():
+    while True:
+      if mode == 'CRYPT':
+        crypt(shift, text)
+        result = crypt(shift, text)
+      elif mode == 'DECRYPT':
+        decrypt(shift, text)
+        result = decrypt(shift, text)
+      else:
+          break
+          result = 'Введена некорректная команда. Для шифрования введите CRYPT, для расшифровки - DECRYPT.'
+      return result
+
+  print('Результат: ' + processString())
+  
+main()
